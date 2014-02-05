@@ -8,6 +8,10 @@
   "dependencies": {
     "marked": "0.3.x"
   },
+  "devDependencies": {
+    "mocha": "1.17.x",
+    "should": "3.1.x"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/hennerthepenner/literate-tex.git"
@@ -16,5 +20,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hennerthepenner/literate-tex/issues"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test node node_modules/mocha/bin/mocha -R spec"
   }
 }
