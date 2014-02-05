@@ -1,9 +1,15 @@
 Basic features
 ==============
 
-- Parse a markdown formatted string and make it output tex instead of the 
-  usual html. This can also be done with pandoc, but there are a few features 
-  missing. Let's try to write a tex renderer for marked.
+Markdown to tex parser
+----------------------
+
+Parse a markdown formatted string and make it output tex instead of the 
+usual html. This can also be done with pandoc, but there are a few features 
+missing. Let's try to write a tex renderer for marked.
+
+    marked = require("marked")
+    texRenderer = require("./renderer")
 
 
 Tex features
