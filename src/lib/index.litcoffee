@@ -15,8 +15,15 @@ missing. Let's try to write a tex renderer for marked.
 Tex features
 ============
 
-- Output the markdown blockquotes as fancy listing thingy with syntax 
-  highlighting.
+Code blocks with syntax highlighting
+------------------------------------
+
+Output the markdown code blocks as fancy listing thingy with syntax 
+highlighting. This also be done using the renderer. People use different tex 
+packages for code rendering. The most common are listing (built-in) and 
+listings, I think. Pandoc uses verbatim.
+
+
 - Make linenumbers that can span over multiple blocks of code examples.
 - Add captions (`\caption`) and labels (`\label`).
 - The syntax highlighting can be derived from the file ending (e.g. 

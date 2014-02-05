@@ -59,7 +59,7 @@
     it("renders code blocks", function(done) {
       var markdown, tex;
       markdown = "This is coffeescript:\n\n    console.log(bla)";
-      tex = "This is coffeescript:\n\nconsole.log(bla)\n\n";
+      tex = "This is coffeescript:\n\n\\begin{listing}\nconsole.log(bla)\n\\end{listing}\n\n";
       render(markdown).should.eql(tex);
       return done();
     });

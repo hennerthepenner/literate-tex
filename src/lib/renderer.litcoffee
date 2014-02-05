@@ -6,6 +6,17 @@ are inline renderer methods and block renderer methods.
 
     module.exports = class Renderer
 
+The renderer can be supplied with some options. These are:
+- packageName (String): Name of the package (like verbatim, lstlisting, 
+                        listing) to be used for the environment. Defaults to 
+                        listing.
+- packageOptions (String): Options to be passed to the environment. Defaults 
+                           to none.
+
+      constructor: (packageName, packageOptions) ->
+        @packageName = packageName or "listing"
+        @packageOptions = packageOptions or ""
+
 
 Inline renderer methods
 -----------------------
@@ -49,10 +60,14 @@ Block renderer methods
 
 ### paragraph
 
-Code rendering is a bit tricky. Let's spare that for a later time and just use 
-a dummy function.
+Uses some package like listing (can be specified in the constructor) to create 
+an environment.
 
-      code: (code, language) -> "#{code}\n\n"
+      code: (code, language) -> 
+        """
+        \\begin{#{@packageName}}#{#{@packageOptions}}
+        #{code}
+        \\end{#{@packageName}}\n\n"""
 
 Print paragraph as a paragraph with a blank line.
 

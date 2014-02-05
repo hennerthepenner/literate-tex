@@ -54,7 +54,12 @@ describe "Renderer", () ->
 
                    console.log(bla)
                """
-    tex = "This is coffeescript:\n\nconsole.log(bla)\n\n"
+    tex = """
+          This is coffeescript:
+
+          \\begin{listing}
+          console.log(bla)
+          \\end{listing}\n\n"""
     render(markdown).should.eql(tex)
     done()
 
