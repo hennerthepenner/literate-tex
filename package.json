@@ -6,8 +6,8 @@
   "scripts": {
   },
   "dependencies": {
-
-    },
+    "marked": "0.3.x"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/hennerthepenner/literate-tex.git"
