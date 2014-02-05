@@ -24,9 +24,32 @@
       render("__bla__").should.eql("\\textbf{bla}\n\n");
       return done();
     });
-    return it("renders emphasized text to italic", function(done) {
+    it("renders emphasized text to italic", function(done) {
       render("*bla*").should.eql("\\textit{bla}\n\n");
       render("_bla_").should.eql("\\textit{bla}\n\n");
+      return done();
+    });
+    it("renders codespan text to monotype", function(done) {
+      render("`bla`").should.eql("\\texttt{bla}\n\n");
+      return done();
+    });
+    it("renders linebreaks to linebreaks", function(done) {
+      render("bla\nblub").should.eql("bla\nblub\n\n");
+      return done();
+    });
+    it("doesn't render strikethroughs", function(done) {
+      render("~~bla~~").should.eql("bla\n\n");
+      return done();
+    });
+    it("renders links to urls", function(done) {
+      var markdown, tex;
+      markdown = 'This is [an example](http://example.com/ "Title") inline link.';
+      tex = "This is \\url{http://example.com/} inline link.\n\n";
+      render(markdown).should.eql(tex);
+      return done();
+    });
+    return it("doesn't render images", function(done) {
+      render("![bla](/path/to/img.jpg)").should.eql("\n\n");
       return done();
     });
   });
