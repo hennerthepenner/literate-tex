@@ -3,10 +3,10 @@ marked = require("marked")
 should = require("should")
 
 
-describe "Renderer", () ->
-  # Helper function to make marked use the tex renderer
-  render = (inputText) -> marked(inputText, renderer: new Renderer())
+# Helper function to make marked use the tex renderer
+render = (inputText) -> marked(inputText, renderer: new Renderer())
 
+describe "Renderer", () ->
   ###
   # Inline rendering
   ###
@@ -47,21 +47,6 @@ describe "Renderer", () ->
   ###
   # Block rendering
   ###
-
-  it "renders code blocks", (done) ->
-    markdown = """
-               This is coffeescript:
-
-                   console.log(bla)
-               """
-    tex = """
-          This is coffeescript:
-
-          \\begin{listing}
-          console.log(bla)
-          \\end{listing}\n\n"""
-    render(markdown).should.eql(tex)
-    done()
 
   it "renders paragraphs by adding a blank line", (done) ->
     render("bla").should.eql("bla\n\n")
@@ -107,4 +92,44 @@ describe "Renderer", () ->
                """
     tex = "First HeaderSecond HeaderContent CellContent CellContent CellContent Cell\n\n"
     render(markdown).should.eql(tex)
+    done()
+
+
+describe "Code rendering", () ->
+  # Use this pseudo coffeescript tutorial written in literate coffeescript to 
+  # feed into the rendering process
+  markdown = """
+             This is coffeescript:
+
+                 console.log(bla)
+             """
+
+  it "renders using listing and minted by default", (done) ->
+    tex = """
+          This is coffeescript:
+
+          \\begin{listing}
+          \\begin{minted}
+          console.log(bla)
+          \\end{minted}
+          \\end{listing}\n\n"""
+    render(markdown).should.eql(tex)
+    done()
+
+  it "can be supplied with a custom highlighting function", (done) ->
+    tex = """
+          This is coffeescript:
+
+          \\begin{listing}
+          \\begin{ernie}
+          console.log(bla)
+          \\end{ernie}
+          \\end{listing}\n\n"""
+
+    # Let's ask ernie from the sesame street to highlight some code for us
+    ernieHighlighting = (code, language) ->
+      "\\begin{ernie}\n#{code}\n\\end{ernie}"
+
+    opts = {renderer: new Renderer(), highlight: ernieHighlighting}
+    marked(markdown, opts).should.eql(tex)
     done()

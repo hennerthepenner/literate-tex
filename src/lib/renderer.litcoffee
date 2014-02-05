@@ -6,16 +6,8 @@ are inline renderer methods and block renderer methods.
 
     module.exports = class Renderer
 
-The renderer can be supplied with some options. These are:
-- packageName (String): Name of the package (like verbatim, lstlisting, 
-                        listing) to be used for the environment. Defaults to 
-                        listing.
-- packageOptions (String): Options to be passed to the environment. Defaults 
-                           to none.
-
-      constructor: (packageName, packageOptions) ->
-        @packageName = packageName or "listing"
-        @packageOptions = packageOptions or ""
+      constructor: (options) ->
+        @options = options or {}
 
 
 Inline renderer methods
@@ -63,11 +55,32 @@ Block renderer methods
 Uses some package like listing (can be specified in the constructor) to create 
 an environment.
 
+The renderer can be supplied with some options. These are:
+- packageName (String): Name of the package (like verbatim, lstlisting, 
+                        listing) to be used for the environment. Defaults to 
+                        listing.
+- packageOptions (String): Options to be passed to the environment. Defaults 
+                           to none.
+
       code: (code, language) -> 
+        @options.packageName ?= "listing"
+        @options.packageOptions ?= ""
+
+        if "highlight" of @options and typeof @options.highlight is "function"
+          highlighted = @options.highlight(code, language)
+        else
+          highlighted = @defaultHighlighting(code, language)
+
+        # If highlighting fails, at least include the code
+        highlighted ?= code
+
         """
-        \\begin{#{@packageName}}#{#{@packageOptions}}
-        #{code}
-        \\end{#{@packageName}}\n\n"""
+        \\begin{#{@options.packageName}}#{#{@options.packageOptions}}
+        #{highlighted}
+        \\end{#{@options.packageName}}\n\n"""
+
+      defaultHighlighting: (code, language) ->
+        "\\begin{minted}\n#{code}\n\\end{minted}"
 
 Print paragraph as a paragraph with a blank line.
 

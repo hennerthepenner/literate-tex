@@ -23,6 +23,12 @@ highlighting. This also be done using the renderer. People use different tex
 packages for code rendering. The most common are listing (built-in) and 
 listings, I think. Pandoc uses verbatim.
 
+For the syntax highlighting marked allows adding a custom function to do some 
+custom rendering there. The render provides a function that supports syntax 
+with the minted package, which is pretty cool and extremely feature rich and 
+supports a whole bunch of languages, but needs python to be installed and the 
+`-shell-escape` options for latex. So people still might want to use their 
+custom functions.
 
 - Make linenumbers that can span over multiple blocks of code examples.
 - Add captions (`\caption`) and labels (`\label`).
