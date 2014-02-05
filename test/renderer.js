@@ -15,10 +15,10 @@
         renderer: new Renderer()
       });
     };
-    it("renders paragraphs by adding a blank line", function(done) {
-      render("bla").should.eql("bla\n\n");
-      return done();
-    });
+    /*
+    # Inline rendering
+    */
+
     it("renders strong text to bold face", function(done) {
       render("**bla**").should.eql("\\textbf{bla}\n\n");
       render("__bla__").should.eql("\\textbf{bla}\n\n");
@@ -48,8 +48,60 @@
       render(markdown).should.eql(tex);
       return done();
     });
-    return it("doesn't render images", function(done) {
+    it("doesn't render images", function(done) {
       render("![bla](/path/to/img.jpg)").should.eql("\n\n");
+      return done();
+    });
+    /*
+    # Block rendering
+    */
+
+    it("renders code blocks", function(done) {
+      var markdown, tex;
+      markdown = "This is coffeescript:\n\n    console.log(bla)";
+      tex = "This is coffeescript:\n\nconsole.log(bla)\n\n";
+      render(markdown).should.eql(tex);
+      return done();
+    });
+    it("renders paragraphs by adding a blank line", function(done) {
+      render("bla").should.eql("bla\n\n");
+      return done();
+    });
+    it("doesn't change html", function(done) {
+      render("<p>bla</p>").should.eql("<p>bla</p>");
+      return done();
+    });
+    it("renders headings as sections and paragraphs", function(done) {
+      render("bla\n===").should.eql("\\section{bla}\n\n");
+      render("bla\n---").should.eql("\\subsection{bla}\n\n");
+      render("# bla").should.eql("\\section{bla}\n\n");
+      render("## bla").should.eql("\\subsection{bla}\n\n");
+      render("### bla").should.eql("\\subsubsection{bla}\n\n");
+      render("#### bla").should.eql("\\paragraph{bla}\n\n");
+      render("##### bla").should.eql("\\subparagraph{bla}\n\n");
+      render("###### bla").should.eql("bla\n\n");
+      return done();
+    });
+    it("renders horizontal lines as page breaks", function(done) {
+      render("***").should.eql("\\pagebreak\n\n");
+      return done();
+    });
+    it("renders lists as itemized or enumerated thingy", function(done) {
+      var enumerated, itemized;
+      itemized = "\\begin{itemize}\n\\item bla\n\\end{itemize}\n\n";
+      render("* bla").should.eql(itemized);
+      render("- bla").should.eql(itemized);
+      render("+ bla").should.eql(itemized);
+      enumerated = "\\begin{enumerate}\n\\item bla\n\\end{enumerate}\n\n";
+      render("1. bla").should.eql(enumerated);
+      render("8. bla").should.eql(enumerated);
+      return done();
+    });
+    return it("doesn't render tables", function(done) {
+      var markdown, tex;
+      markdown = "First Header  | Second Header\n------------- | -------------\nContent Cell  | Content Cell\nContent Cell  | Content Cell";
+      tex = "First HeaderSecond HeaderContent CellContent CellContent CellContent Cell\n\n";
+      render(markdown).should.eql(tex);
       return done();
     });
   });
