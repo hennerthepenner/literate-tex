@@ -15,3 +15,8 @@ describe "Renderer", () ->
     render("**bla**").should.eql("\\textbf{bla}\n\n")
     render("__bla__").should.eql("\\textbf{bla}\n\n")
     done()
+
+  it "renders emphasized text to italic", (done) ->
+    render("*bla*").should.eql("\\textit{bla}\n\n")
+    render("_bla_").should.eql("\\textit{bla}\n\n")
+    done()

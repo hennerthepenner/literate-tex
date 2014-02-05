@@ -12,6 +12,11 @@ Inline renderer methods
 
 ### strong
 
+Print normal emphasis (markdown: `*`, `_`) as italic.
+
+      em: (text) -> "\\textit{#{text}}"
+
+      
 Print strong emphasis (markdown: `**`, `__`) as bold.
 
       strong: (text) -> "\\textbf{#{text}}"

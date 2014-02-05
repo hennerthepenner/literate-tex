@@ -19,9 +19,14 @@
       render("bla").should.eql("bla\n\n");
       return done();
     });
-    return it("renders strong text to bold face", function(done) {
+    it("renders strong text to bold face", function(done) {
       render("**bla**").should.eql("\\textbf{bla}\n\n");
       render("__bla__").should.eql("\\textbf{bla}\n\n");
+      return done();
+    });
+    return it("renders emphasized text to italic", function(done) {
+      render("*bla*").should.eql("\\textit{bla}\n\n");
+      render("_bla_").should.eql("\\textit{bla}\n\n");
       return done();
     });
   });
