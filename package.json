@@ -1,0 +1,20 @@
+{
+  "name": "literate-tex",
+  "version": "0.0.0",
+  "description": "Yet another precompiler for markdown flavored literate programming",
+  "main": "index.js",
+  "scripts": {
+  },
+  "dependencies": {
+
+    },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hennerthepenner/literate-tex.git"
+  },
+  "author": "Hendrik Sander <hendrik.sander@googlemail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hennerthepenner/literate-tex/issues"
+  }
+}
