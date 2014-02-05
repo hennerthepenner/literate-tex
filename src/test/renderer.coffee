@@ -1,12 +1,17 @@
 Renderer = require("../lib/renderer")
 marked = require("marked")
+should = require("should")
 
 
 describe "Renderer", () ->
   # Helper function to make marked use the tex renderer
   render = (inputText) -> marked(inputText, renderer: new Renderer())
 
+  it "renders paragraphs by adding a blank line", (done) ->
+    render("bla").should.eql("bla\n\n")
+    done()
+
   it "renders strong text to bold face", (done) ->
-    render("**text**").should.eql("\\textbf{text}")
-    render("__text__").should.eql("\\textbf{text}")
+    render("**bla**").should.eql("\\textbf{bla}\n\n")
+    render("__bla__").should.eql("\\textbf{bla}\n\n")
     done()

@@ -14,4 +14,14 @@ Inline renderer methods
 
 Print strong emphasis (markdown: `**`, `__`) as bold.
 
-      strong: (text) -> "\\textbf{text}"
+      strong: (text) -> "\\textbf{#{text}}"
+
+
+Block renderer methods
+----------------------
+
+### paragraph
+
+Print paragraph as a paragraph with a blank line.
+
+      paragraph: (text) -> "#{text}\n\n"
