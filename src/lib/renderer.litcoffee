@@ -55,27 +55,30 @@ Block renderer methods
 Uses some package like listing (can be specified in the constructor) to create 
 an environment.
 
-The renderer can be supplied with some options. These are:
-- packageName (String): Name of the package (like verbatim, lstlisting, 
-                        listing) to be used for the environment. Defaults to 
-                        listing.
-- packageOptions (String): Options to be passed to the environment. Defaults 
-                           to none.
-
       code: (code, language) -> 
         @options.packageName ?= "listing"
         @options.packageOptions ?= ""
+        @options.resetLineNumbers ?= true
         @options.minted ?= {}
         @options.minted.linenos ?= true
         @options.minted.bgcolor ?= "codebg"
 
+        if @options.resetLineNumbers is true
+          @options.minted.firstnumber = 1
+        else
+          @options.minted.firstnumber ?= 1
+
         if "highlight" of @options and typeof @options.highlight is "function"
-          highlighted = @options.highlight(code, language)
+          highlighted = @options.highlight.call(@, code, language)
         else
           highlighted = @defaultHighlighting(code, language)
 
         # If highlighting fails, at least include the code
         highlighted ?= code
+
+        if @options.resetLineNumbers is false
+          lines = code.split(/\r\n|\r|\n/)
+          @options.minted.firstnumber += lines.length
 
         """
         \\begin{#{@options.packageName}}#{#{@options.packageOptions}}

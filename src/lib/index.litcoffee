@@ -39,7 +39,17 @@ the correct programming language for syntax highlighting:
 - by overriding stuff with a global language option.
 
 
-- Make linenumbers that can span over multiple blocks of code examples.
+Linenumbers
+-----------
+
+It's pretty easy to add nice looking line numbers with the minted package. But 
+sometimes it's necassary to keep the numbers spaning over multiple blocks of 
+code. To do that we have a resetLineNumbers option.
+
+
+Captions and labels
+-------------------
+
 - Add captions (`\caption`) and labels (`\label`).
 
 

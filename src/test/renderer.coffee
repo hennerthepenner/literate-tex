@@ -6,7 +6,7 @@ should = require("should")
 # Helper function to make marked use the tex renderer
 render = (inputText) -> marked(inputText, renderer: new Renderer())
 
-describe "Renderer", () ->
+describe "Basic rendering", () ->
   ###
   # Inline rendering
   ###
@@ -110,7 +110,7 @@ describe "Code rendering", () ->
             This is coffeescript:
 
             \\begin{listing}
-            \\begin{minted}[linenos,bgcolor=codebg]{text}
+            \\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{text}
             console.log(bla)
             \\end{minted}
             \\end{listing}\n\n"""
@@ -148,7 +148,7 @@ describe "Code rendering", () ->
             This is coffeescript:
 
             \\begin{listing}
-            \\begin{minted}[linenos,bgcolor=codebg]{coffeescript}
+            \\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{coffeescript}
             console.log(bla)
             \\end{minted}
             \\end{listing}\n\n"""
@@ -179,3 +179,63 @@ describe "Code rendering", () ->
           done()
 
       marked(githubMarkdown, opts)
+
+
+describe "Line numbers", () ->
+  markdown = """
+             Block 1:
+
+                 console.log("bla 1")
+
+             Block 2:
+
+                 console.log("bla 2")
+
+             Done."""
+
+  it "are resetted for every block", (done) ->
+    tex = """
+          Block 1:
+
+          \\begin{listing}
+          \\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{text}
+          console.log("bla 1")
+          \\end{minted}
+          \\end{listing}
+
+          Block 2:
+
+          \\begin{listing}
+          \\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{text}
+          console.log("bla 2")
+          \\end{minted}
+          \\end{listing}
+
+          Done.\n\n"""
+    render(markdown).should.eql(tex)
+    done()
+
+  it "can be spanning over multiple blocks", (done) ->
+    tex = """
+          Block 1:
+
+          \\begin{listing}
+          \\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{text}
+          console.log("bla 1")
+          \\end{minted}
+          \\end{listing}
+
+          Block 2:
+
+          \\begin{listing}
+          \\begin{minted}[linenos,bgcolor=codebg,firstnumber=2]{text}
+          console.log("bla 2")
+          \\end{minted}
+          \\end{listing}
+
+          Done.\n\n"""
+    opts = 
+      renderer: new Renderer()
+      resetLineNumbers: false
+    marked(markdown, opts).should.eql(tex)
+    done()

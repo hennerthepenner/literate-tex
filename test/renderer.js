@@ -14,7 +14,7 @@
     });
   };
 
-  describe("Renderer", function() {
+  describe("Basic rendering", function() {
     /*
     # Inline rendering
     */
@@ -105,7 +105,7 @@
       markdown = "This is coffeescript:\n\n    console.log(bla)";
       it("renders using listing and minted by default", function(done) {
         var tex;
-        tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg]{text}\nconsole.log(bla)\n\\end{minted}\n\\end{listing}\n\n";
+        tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{text}\nconsole.log(bla)\n\\end{minted}\n\\end{listing}\n\n";
         render(markdown).should.eql(tex);
         return done();
       });
@@ -136,7 +136,7 @@
       });
       return it("renders the correct programming language if in options", function(done) {
         var opts, tex;
-        tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg]{coffeescript}\nconsole.log(bla)\n\\end{minted}\n\\end{listing}\n\n";
+        tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{coffeescript}\nconsole.log(bla)\n\\end{minted}\n\\end{listing}\n\n";
         opts = {
           renderer: new Renderer(),
           defaultLanguage: "coffeescript"
@@ -159,6 +159,27 @@
         };
         return marked(githubMarkdown, opts);
       });
+    });
+  });
+
+  describe("Line numbers", function() {
+    var markdown;
+    markdown = "Block 1:\n\n    console.log(\"bla 1\")\n\nBlock 2:\n\n    console.log(\"bla 2\")\n\nDone.";
+    it("are resetted for every block", function(done) {
+      var tex;
+      tex = "Block 1:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{text}\nconsole.log(\"bla 1\")\n\\end{minted}\n\\end{listing}\n\nBlock 2:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{text}\nconsole.log(\"bla 2\")\n\\end{minted}\n\\end{listing}\n\nDone.\n\n";
+      render(markdown).should.eql(tex);
+      return done();
+    });
+    return it("can be spanning over multiple blocks", function(done) {
+      var opts, tex;
+      tex = "Block 1:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg,firstnumber=1]{text}\nconsole.log(\"bla 1\")\n\\end{minted}\n\\end{listing}\n\nBlock 2:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg,firstnumber=2]{text}\nconsole.log(\"bla 2\")\n\\end{minted}\n\\end{listing}\n\nDone.\n\n";
+      opts = {
+        renderer: new Renderer(),
+        resetLineNumbers: false
+      };
+      marked(markdown, opts).should.eql(tex);
+      return done();
     });
   });
 
