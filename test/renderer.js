@@ -122,7 +122,7 @@
         marked(markdown, opts).should.eql(tex);
         return done();
       });
-      return it("unfortunately doesn't know the programming language", function(done) {
+      it("unfortunately doesn't know the programming language", function(done) {
         var opts;
         opts = {
           renderer: new Renderer(),
@@ -133,6 +133,16 @@
           }
         };
         return marked(markdown, opts);
+      });
+      return it("renders the correct programming language if in options", function(done) {
+        var opts, tex;
+        tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg]{coffeescript}\nconsole.log(bla)\n\\end{minted}\n\\end{listing}\n\n";
+        opts = {
+          renderer: new Renderer(),
+          defaultLanguage: "coffeescript"
+        };
+        marked(markdown, opts).should.eql(tex);
+        return done();
       });
     });
     return describe("when using github flavored three ticks block", function() {

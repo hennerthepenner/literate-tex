@@ -82,11 +82,14 @@ The renderer can be supplied with some options. These are:
         #{highlighted}
         \\end{#{@options.packageName}}\n\n"""
 
-Create a nice default tex syntax highlighting. In some cases the language is 
-not provided (when using standard markdown code blocks). Let's default to 
-"text" then.
+Create a nice default tex syntax highlighting. The minted package does a great 
+job using pygments. Users can options, but there are some defaults. In some 
+cases the programming language is given in github flavored markdown using the 
+three ticks syntax for code blocks. As a fallback let's check the options for 
+a "defaultLanguage". If that doesn't work, we have to use "text".
 
-      defaultHighlighting: (code, language="text") ->
+      defaultHighlighting: (code, language) ->
+        # Prepare options for the minted package
         mintedOpts = []
         for optName, optValue of @options.minted
           if optValue is true
@@ -94,6 +97,11 @@ not provided (when using standard markdown code blocks). Let's default to
           else
             mintedOpts.push(optName + "=" + optValue)
         mintedOptsStr = "[" + mintedOpts.join(",") + "]"
+
+        # Determine the programming language
+        language ?= @options.defaultLanguage or "text"
+
+        # Return the string
         "\\begin{minted}#{mintedOptsStr}{#{language}}\n#{code}\n\\end{minted}"
 
 Print paragraph as a paragraph with a blank line.

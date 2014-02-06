@@ -143,6 +143,22 @@ describe "Code rendering", () ->
       
       marked(markdown, opts)
 
+    it "renders the correct programming language if in options", (done) ->
+      tex = """
+            This is coffeescript:
+
+            \\begin{listing}
+            \\begin{minted}[linenos,bgcolor=codebg]{coffeescript}
+            console.log(bla)
+            \\end{minted}
+            \\end{listing}\n\n"""
+      opts = 
+        renderer: new Renderer()
+        defaultLanguage: "coffeescript"
+
+      marked(markdown, opts).should.eql(tex)
+      done()
+
 
   describe "when using github flavored three ticks block", () ->  
     # Also give it a shot for the github flavored coding style to be able to 

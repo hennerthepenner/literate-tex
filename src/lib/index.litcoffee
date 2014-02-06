@@ -30,13 +30,17 @@ supports a whole bunch of languages, but needs python to be installed and the
 `-shell-escape` options for latex. So people still might want to use their 
 custom functions.
 
+Github uses linguist to run statistic analysis of source code to determine the 
+programming language used. That library is written in ruby and cannot easily 
+be included in this project. I think there are some other means of determining 
+the correct programming language for syntax highlighting:
+- using github flavored markdown and explicitely stating it there. Since 
+  explicit is better than implicit, it's should be used if given.
+- by overriding stuff with a global language option.
+
+
 - Make linenumbers that can span over multiple blocks of code examples.
 - Add captions (`\caption`) and labels (`\label`).
-- The correct programming language for syntax highlighting can be determined 
-  - by deriving it from the file ending (e.g. litcoffee to produce 
-    coffeescript code blocks).
-  - by using github flavored markdown and explicitely stating it there.
-  - by overriding stuff with a global language option.
 
 
 Markdown features
@@ -55,3 +59,5 @@ Fancy features
   through a compiler.
 - Option to easily call compilers automatically.
 - Sourcemaps for languages that support it.
+- derive the programming language from the file ending (e.g. litcoffee to 
+  produce coffeescript code blocks).
