@@ -65,6 +65,9 @@ The renderer can be supplied with some options. These are:
       code: (code, language) -> 
         @options.packageName ?= "listing"
         @options.packageOptions ?= ""
+        @options.minted ?= {}
+        @options.minted.linenos ?= true
+        @options.minted.bgcolor ?= "codebg"
 
         if "highlight" of @options and typeof @options.highlight is "function"
           highlighted = @options.highlight(code, language)
@@ -79,8 +82,19 @@ The renderer can be supplied with some options. These are:
         #{highlighted}
         \\end{#{@options.packageName}}\n\n"""
 
-      defaultHighlighting: (code, language) ->
-        "\\begin{minted}\n#{code}\n\\end{minted}"
+Create a nice default tex syntax highlighting. In some cases the language is 
+not provided (when using standard markdown code blocks). Let's default to 
+"text" then.
+
+      defaultHighlighting: (code, language="text") ->
+        mintedOpts = []
+        for optName, optValue of @options.minted
+          if optValue is true
+            mintedOpts.push(optName)
+          else
+            mintedOpts.push(optName + "=" + optValue)
+        mintedOptsStr = "[" + mintedOpts.join(",") + "]"
+        "\\begin{minted}#{mintedOptsStr}{#{language}}\n#{code}\n\\end{minted}"
 
 Print paragraph as a paragraph with a blank line.
 

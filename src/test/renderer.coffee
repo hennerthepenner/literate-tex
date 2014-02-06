@@ -96,40 +96,70 @@ describe "Renderer", () ->
 
 
 describe "Code rendering", () ->
-  # Use this pseudo coffeescript tutorial written in literate coffeescript to 
-  # feed into the rendering process
-  markdown = """
-             This is coffeescript:
+  describe "when using normal markdown code blocks", () ->
+    # Use this pseudo coffeescript tutorial written in literate coffeescript to 
+    # feed into the rendering process
+    markdown = """
+               This is coffeescript:
 
-                 console.log(bla)
-             """
+                   console.log(bla)
+               """
 
-  it "renders using listing and minted by default", (done) ->
-    tex = """
-          This is coffeescript:
+    it "renders using listing and minted by default", (done) ->
+      tex = """
+            This is coffeescript:
 
-          \\begin{listing}
-          \\begin{minted}
-          console.log(bla)
-          \\end{minted}
-          \\end{listing}\n\n"""
-    render(markdown).should.eql(tex)
-    done()
+            \\begin{listing}
+            \\begin{minted}[linenos,bgcolor=codebg]{text}
+            console.log(bla)
+            \\end{minted}
+            \\end{listing}\n\n"""
+      render(markdown).should.eql(tex)
+      done()
 
-  it "can be supplied with a custom highlighting function", (done) ->
-    tex = """
-          This is coffeescript:
+    it "can be supplied with a custom highlighting function", (done) ->
+      tex = """
+            This is coffeescript:
 
-          \\begin{listing}
-          \\begin{ernie}
-          console.log(bla)
-          \\end{ernie}
-          \\end{listing}\n\n"""
+            \\begin{listing}
+            \\begin{ernie}
+            console.log(bla)
+            \\end{ernie}
+            \\end{listing}\n\n"""
 
-    # Let's ask ernie from the sesame street to highlight some code for us
-    ernieHighlighting = (code, language) ->
-      "\\begin{ernie}\n#{code}\n\\end{ernie}"
+      # Let's ask ernie from the sesame street to highlight some code for us
+      ernieHighlighting = (code, language) ->
+        "\\begin{ernie}\n#{code}\n\\end{ernie}"
 
-    opts = {renderer: new Renderer(), highlight: ernieHighlighting}
-    marked(markdown, opts).should.eql(tex)
-    done()
+      opts = {renderer: new Renderer(), highlight: ernieHighlighting}
+      marked(markdown, opts).should.eql(tex)
+      done()
+
+    it "unfortunately doesn't know the programming language", (done) ->
+      opts = 
+        renderer: new Renderer()
+        highlight: (code, language) -> 
+          if not language then done()
+      
+      marked(markdown, opts)
+
+
+  describe "when using github flavored three ticks block", () ->  
+    # Also give it a shot for the github flavored coding style to be able to 
+    # specify the programming language used.
+    githubMarkdown = """
+                  This is git flavored coffeescript:
+
+                  ```coffeescript
+                  console.log(bla)
+                  ```
+                  """
+
+    it "renders it with the correct programming language", (done) ->
+      opts = 
+        renderer: new Renderer()
+        highlight: (code, language) ->
+          language.should.eql("coffeescript")
+          done()
+
+      marked(githubMarkdown, opts)

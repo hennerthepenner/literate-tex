@@ -32,8 +32,11 @@ custom functions.
 
 - Make linenumbers that can span over multiple blocks of code examples.
 - Add captions (`\caption`) and labels (`\label`).
-- The syntax highlighting can be derived from the file ending (e.g. 
-  litcoffee to produce coffeescript code blocks).
+- The correct programming language for syntax highlighting can be determined 
+  - by deriving it from the file ending (e.g. litcoffee to produce 
+    coffeescript code blocks).
+  - by using github flavored markdown and explicitely stating it there.
+  - by overriding stuff with a global language option.
 
 
 Markdown features

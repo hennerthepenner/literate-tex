@@ -100,26 +100,55 @@
   });
 
   describe("Code rendering", function() {
-    var markdown;
-    markdown = "This is coffeescript:\n\n    console.log(bla)";
-    it("renders using listing and minted by default", function(done) {
-      var tex;
-      tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{minted}\nconsole.log(bla)\n\\end{minted}\n\\end{listing}\n\n";
-      render(markdown).should.eql(tex);
-      return done();
+    describe("when using normal markdown code blocks", function() {
+      var markdown;
+      markdown = "This is coffeescript:\n\n    console.log(bla)";
+      it("renders using listing and minted by default", function(done) {
+        var tex;
+        tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{minted}[linenos,bgcolor=codebg]{text}\nconsole.log(bla)\n\\end{minted}\n\\end{listing}\n\n";
+        render(markdown).should.eql(tex);
+        return done();
+      });
+      it("can be supplied with a custom highlighting function", function(done) {
+        var ernieHighlighting, opts, tex;
+        tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{ernie}\nconsole.log(bla)\n\\end{ernie}\n\\end{listing}\n\n";
+        ernieHighlighting = function(code, language) {
+          return "\\begin{ernie}\n" + code + "\n\\end{ernie}";
+        };
+        opts = {
+          renderer: new Renderer(),
+          highlight: ernieHighlighting
+        };
+        marked(markdown, opts).should.eql(tex);
+        return done();
+      });
+      return it("unfortunately doesn't know the programming language", function(done) {
+        var opts;
+        opts = {
+          renderer: new Renderer(),
+          highlight: function(code, language) {
+            if (!language) {
+              return done();
+            }
+          }
+        };
+        return marked(markdown, opts);
+      });
     });
-    return it("can be supplied with a custom highlighting function", function(done) {
-      var ernieHighlighting, opts, tex;
-      tex = "This is coffeescript:\n\n\\begin{listing}\n\\begin{ernie}\nconsole.log(bla)\n\\end{ernie}\n\\end{listing}\n\n";
-      ernieHighlighting = function(code, language) {
-        return "\\begin{ernie}\n" + code + "\n\\end{ernie}";
-      };
-      opts = {
-        renderer: new Renderer(),
-        highlight: ernieHighlighting
-      };
-      marked(markdown, opts).should.eql(tex);
-      return done();
+    return describe("when using github flavored three ticks block", function() {
+      var githubMarkdown;
+      githubMarkdown = "This is git flavored coffeescript:\n\n```coffeescript\nconsole.log(bla)\n```";
+      return it("renders it with the correct programming language", function(done) {
+        var opts;
+        opts = {
+          renderer: new Renderer(),
+          highlight: function(code, language) {
+            language.should.eql("coffeescript");
+            return done();
+          }
+        };
+        return marked(githubMarkdown, opts);
+      });
     });
   });
 
