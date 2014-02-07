@@ -6,7 +6,8 @@
   "scripts": {
   },
   "dependencies": {
-    "marked": "0.3.x"
+    "marked": "0.3.x",
+    "marked-texrenderer": "git://github.com/hennerthepenner/marked-texrenderer#master"
   },
   "devDependencies": {
     "mocha": "1.17.x",
